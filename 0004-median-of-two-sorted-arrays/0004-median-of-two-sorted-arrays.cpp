@@ -1,33 +1,44 @@
 class Solution {
 public:
-    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
-        // Get the sizes of both input arrays.
-        int n = nums1.size();
-        int m = nums2.size();
+    double findMedianSortedArrays(vector<int>& a, vector<int>& b) {
+        int n1=a.size();
+        int n2=b.size();
+        int i=0,j=0;
+        int n=(n1+n2);
+        int ind2=n/2;
+        int ind1=ind2-1;
+        int cnt=0;
+        int ind1el=-1,ind2el=-2;
+        while(i<n1 && j<n2){
+            if(a[i]<b[j]){
+                if(cnt==ind1) ind1el=a[i];
+                if(cnt==ind2) ind2el=a[i];
+                cnt++;
+                i++;
+            }
+            else{
+                if(cnt==ind1) ind1el=b[j];
+                if(cnt==ind2) ind2el=b[j];
+                cnt++;
+                j++;
 
-        // Merge the arrays into a single sorted array.
-        vector<int> merged;
-        for (int i = 0; i < n; i++) {
-            merged.push_back(nums1[i]);
+            }
         }
-        for (int i = 0; i < m; i++) {
-            merged.push_back(nums2[i]);
+        while(i<n1){
+            if(cnt==ind1) ind1el=a[i];
+            if(cnt==ind2) ind2el=a[i];
+            cnt++;
+            i++;
         }
-
-        // Sort the merged array.
-        sort(merged.begin(), merged.end());
-
-        // Calculate the total number of elements in the merged array.
-        int total = merged.size();
-
-        if (total % 2 == 1) {
-            // If the total number of elements is odd, return the middle element as the median.
-            return static_cast<double>(merged[total / 2]);
-        } else {
-            // If the total number of elements is even, calculate the average of the two middle elements as the median.
-            int middle1 = merged[total / 2 - 1];
-            int middle2 = merged[total / 2];
-            return (static_cast<double>(middle1) + static_cast<double>(middle2)) / 2.0;
+        while(j<n2){
+            if(cnt==ind1) ind1el=b[j];
+            if(cnt==ind2) ind2el=b[j];
+            cnt++;
+            j++;
         }
+        if(n%2==1){
+            return ind2el;
+        }
+        return (double)((double)(ind1el+ind2el))/2.0;
     }
 };
